@@ -1,5 +1,7 @@
 package dev.axeldiego.ems.entity;
 
+import java.math.BigDecimal;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
@@ -31,4 +33,10 @@ public class Employee {
 
     @Column(name = "email_id", nullable = false, unique = true)
     private String email;
+
+    @Column(name = "salary", nullable = false, precision = 15, scale = 2)
+    private BigDecimal salary;
+
+    @Column(name = "department", nullable = false)
+    private String department;
 }

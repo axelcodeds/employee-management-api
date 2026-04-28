@@ -1,13 +1,14 @@
 package dev.axeldiego.ems.service;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import dev.axeldiego.ems.dto.EmployeeDto;
 
 public interface EmployeeService {
     EmployeeDto createEmployee(EmployeeDto employeeDto);
 
-    List<EmployeeDto> getAllEmployees();
+    Page<EmployeeDto> getAllEmployees(Pageable pageable, String department);
 
     EmployeeDto getEmployeeById(Long employeeId);
 
