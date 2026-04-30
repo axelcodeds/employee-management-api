@@ -3,14 +3,19 @@ package dev.axeldiego.ems.config;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
+import dev.axeldiego.ems.entity.Department;
 import dev.axeldiego.ems.entity.Employee;
+import dev.axeldiego.ems.entity.EmployeeStatus;
+import dev.axeldiego.ems.repository.DepartmentRepository;
 import dev.axeldiego.ems.repository.EmployeeRepository;
 
 @Configuration
@@ -48,17 +53,28 @@ public class MockEmployeeDataLoader {
     };
 
     @Bean
-    CommandLineRunner seedMockEmployees(EmployeeRepository employeeRepository) {
+    CommandLineRunner seedMockEmployees(EmployeeRepository employeeRepository, DepartmentRepository departmentRepository) {
         return args -> {
-            if (employeeRepository.count() > 0) {
-                return;
+            employeeRepository.deleteAll();
+            departmentRepository.deleteAll();
+
+            // Seed departments
+            List<Department> departments = new ArrayList<>();
+            for (String deptName : DEPARTMENTS) {
+                departments.add(new Department(null, deptName));
+            }
+            Map<String, Department> savedDepartments = new HashMap<>();
+            for (Department dept : departments) {
+                savedDepartments.put(dept.getName(), departmentRepository.save(dept));
             }
 
+            // Seed employees
             List<Employee> employees = new ArrayList<>();
-
             for (int i = 1; i <= 50; i++) {
                 String firstName = FIRST_NAMES[(i - 1) % FIRST_NAMES.length];
                 String lastName = LAST_NAMES[(i - 1) / FIRST_NAMES.length];
+                EmployeeStatus status = (i <= 40) ? EmployeeStatus.ACTIVE : EmployeeStatus.INACTIVE;
+                String deptName = DEPARTMENTS[(i - 1) % DEPARTMENTS.length];
 
                 employees.add(new Employee(
                         null,
@@ -66,7 +82,10 @@ public class MockEmployeeDataLoader {
                         lastName,
                         firstName.toLowerCase() + "." + lastName.toLowerCase() + i + "@example.com",
                         BigDecimal.valueOf(40000L + (i * 1000L)).setScale(2, RoundingMode.UNNECESSARY),
-                        DEPARTMENTS[(i - 1) % DEPARTMENTS.length]));
+                        savedDepartments.get(deptName),
+                        status,
+                        null,
+                        null));
             }
 
             employeeRepository.saveAll(employees);

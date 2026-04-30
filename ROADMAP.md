@@ -10,9 +10,9 @@
 
 ## Spiral 2: Domain Improvements
 
-- [ ] Step 1: Add employee status
-- [ ] Step 2: Add audit fields
-- [ ] Step 3: Add department relationship
+- [x] Step 1: Add employee status
+- [x] Step 2: Add audit fields
+- [x] Step 3: Add department relationship
 
 ## Spiral 3: Security
 

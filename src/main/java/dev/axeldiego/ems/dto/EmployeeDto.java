@@ -1,15 +1,17 @@
 package dev.axeldiego.ems.dto;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import dev.axeldiego.ems.entity.EmployeeStatus;
 
 @Getter
 @Setter
@@ -32,6 +34,12 @@ public class EmployeeDto {
     @DecimalMin(value = "0.0", inclusive = false, message = "Salary must be greater than zero")
     private BigDecimal salary;
 
-    @NotBlank(message = "Department is required")
-    private String department;
+    @NotNull(message = "Department is required")
+    private DepartmentDto department;
+
+    private EmployeeStatus status;
+
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
 }

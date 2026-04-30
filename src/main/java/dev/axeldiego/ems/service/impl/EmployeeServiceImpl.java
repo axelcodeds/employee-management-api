@@ -8,6 +8,7 @@ import dev.axeldiego.ems.dto.EmployeeDto;
 import dev.axeldiego.ems.entity.Employee;
 import dev.axeldiego.ems.exception.EmployeeAlreadyExistsException;
 import dev.axeldiego.ems.exception.ResourceNotFoundException;
+import dev.axeldiego.ems.mapper.DepartmentMapper;
 import dev.axeldiego.ems.mapper.EmployeeMapper;
 import dev.axeldiego.ems.repository.EmployeeRepository;
 import dev.axeldiego.ems.service.EmployeeService;
@@ -34,7 +35,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     public Page<EmployeeDto> getAllEmployees(Pageable pageable, String department) {
         Page<Employee> employees = (department == null || department.isBlank())
                 ? employeeRepository.findAll(pageable)
-                : employeeRepository.findByDepartmentIgnoreCase(department.trim(), pageable);
+                : employeeRepository.findByDepartmentNameIgnoreCase(department.trim(), pageable);
 
         return employees
                 .map(EmployeeMapper::mapToEmployeeDto);
@@ -60,7 +61,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setLastName(employeeDto.getLastName());
         employee.setEmail(employeeDto.getEmail());
         employee.setSalary(employeeDto.getSalary());
-        employee.setDepartment(employeeDto.getDepartment());
+        employee.setDepartment(employeeDto.getDepartment() != null
+            ? DepartmentMapper.mapToDepartment(employeeDto.getDepartment())
+            : null);
 
         Employee updatedEmployee = employeeRepository.save(employee);
         return EmployeeMapper.mapToEmployeeDto(updatedEmployee);
