@@ -16,7 +16,7 @@
 
 ## Spiral 3: Security
 
-- [ ] Step 1: User authentication
+- [x] Step 1: User authentication
 - [ ] Step 2: JWT authorization
 - [ ] Step 3: Role-based permissions
 
