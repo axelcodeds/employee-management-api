@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import dev.axeldiego.ems.dto.UserDto;
+import dev.axeldiego.ems.dto.AuthResponse;
 import dev.axeldiego.ems.service.UserService;
+import dev.axeldiego.ems.util.JwtUtil;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -20,10 +22,12 @@ public class AuthController {
 
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
+    private final JwtUtil jwtUtil;
 
-    public AuthController(UserService userService, AuthenticationManager authenticationManager) {
+    public AuthController(UserService userService, AuthenticationManager authenticationManager, JwtUtil jwtUtil) {
         this.userService = userService;
         this.authenticationManager = authenticationManager;
+        this.jwtUtil = jwtUtil;
     }
 
     @PostMapping("/register")
@@ -41,7 +45,8 @@ public class AuthController {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(userDto.getUsername(), userDto.getPassword()));
-            return ResponseEntity.ok("Authenticated");
+            String token = jwtUtil.generateToken(userDto.getUsername());
+            return ResponseEntity.ok(new AuthResponse(token));
         } catch (AuthenticationException ex) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }
