@@ -18,14 +18,14 @@
 
 - [x] Step 1: User authentication
 - [x] Step 2: JWT authorization
-- [ ] Step 3: Role-based permissions
+- [x] Step 3: Role-based permissions
 
 ## Spiral 4: Infrastructure
 
-- [ ] Step 1: Swagger documentation
-- [ ] Step 2: Docker setup
-- [ ] Step 3: Tests
-- [ ] Step 4: CI/CD
+- [x] Step 1: Swagger documentation
+- [x] Step 2: Docker setup
+- [x] Step 3: Tests
+- [x] Step 4: CI/CD
 
 ## Spiral 5: Deployment
 

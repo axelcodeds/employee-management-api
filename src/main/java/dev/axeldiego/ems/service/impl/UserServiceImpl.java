@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import dev.axeldiego.ems.dto.UserDto;
 import dev.axeldiego.ems.entity.User;
+import dev.axeldiego.ems.entity.UserRole;
 import dev.axeldiego.ems.repository.UserRepository;
 import dev.axeldiego.ems.service.UserService;
 
@@ -38,15 +39,23 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         User user = new User();
         user.setUsername(userDto.getUsername());
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        user.setRole(userDto.getRole() != null ? userDto.getRole() : UserRole.USER);
         User saved = userRepository.save(user);
-        return new UserDto(saved.getUsername(), null);
+        return new UserDto(saved.getUsername(), null, saved.getRole());
     }
 
     @Override
     public @NonNull UserDetails loadUserByUsername(@NonNull String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
-        GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_USER");
+        GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + user.getRole().toString());
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), Collections.singleton(authority));
+    }
+
+    @Override
+    public UserDto getUserByUsername(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+        return new UserDto(user.getUsername(), null, user.getRole());
     }
 }

@@ -15,8 +15,12 @@ import org.springframework.context.annotation.Profile;
 import dev.axeldiego.ems.entity.Department;
 import dev.axeldiego.ems.entity.Employee;
 import dev.axeldiego.ems.entity.EmployeeStatus;
+import dev.axeldiego.ems.entity.User;
+import dev.axeldiego.ems.entity.UserRole;
 import dev.axeldiego.ems.repository.DepartmentRepository;
 import dev.axeldiego.ems.repository.EmployeeRepository;
+import dev.axeldiego.ems.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @Profile("dev")
@@ -53,10 +57,25 @@ public class MockEmployeeDataLoader {
     };
 
     @Bean
-    CommandLineRunner seedMockEmployees(EmployeeRepository employeeRepository, DepartmentRepository departmentRepository) {
+    CommandLineRunner seedMockEmployees(EmployeeRepository employeeRepository, DepartmentRepository departmentRepository,
+            UserRepository userRepository, PasswordEncoder passwordEncoder) {
         return args -> {
             employeeRepository.deleteAll();
             departmentRepository.deleteAll();
+            userRepository.deleteAll();
+
+            // Seed test users
+            User adminUser = new User();
+            adminUser.setUsername("admin");
+            adminUser.setPassword(passwordEncoder.encode("admin123"));
+            adminUser.setRole(UserRole.ADMIN);
+            userRepository.save(adminUser);
+
+            User regularUser = new User();
+            regularUser.setUsername("user");
+            regularUser.setPassword(passwordEncoder.encode("user123"));
+            regularUser.setRole(UserRole.USER);
+            userRepository.save(regularUser);
 
             // Seed departments
             List<Department> departments = new ArrayList<>();
