@@ -4,8 +4,7 @@
 A production-oriented backend for managing employees and departments with secure access control, validation, and clean API design. The system focuses on scalable patterns (layered architecture, DTO separation) and real-world concerns like authentication, authorization, auditing, and API documentation.
 
 ## 🎥 Demo
-- **YouTube demo:** [![EMS API Demo](https://img.youtube.com/vi/VIDEO_ID/0.jpg)](https://www.youtube.com/watch?v=VIDEO_ID)
-- **Live API URL:** https://your-live-api.example.com
+- **Live API URL:** https://ems.axeldiego.dev/api/ui
 
 ## ✨ Features
 - JWT-based authentication with stateless security
@@ -108,7 +107,6 @@ curl "http://localhost:8080/api/employees?page=0&size=10&sortBy=id&sortDir=asc&d
 - CI/CD pipelines with automated quality gates
 
 ## 👨‍💻 Author
-- **Name:** Your Name
-- **GitHub:** https://github.com/your-username
-- **LinkedIn:** https://linkedin.com/in/your-profile
+- **Name:** Axel Diego
+- **GitHub:** https://github.com/axelcodeds
 
