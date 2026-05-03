@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,6 +26,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 @Profile("dev")
 public class MockEmployeeDataLoader {
+
+    @Value("${EMS_ADMIN_PASSWORD:admin123}")
+    private String adminPassword;
 
     private static final String[] FIRST_NAMES = {
             "John",
@@ -67,7 +71,7 @@ public class MockEmployeeDataLoader {
             // Seed test users
             User adminUser = new User();
             adminUser.setUsername("admin");
-            adminUser.setPassword(passwordEncoder.encode("admin123"));
+            adminUser.setPassword(passwordEncoder.encode(adminPassword));
             adminUser.setRole(UserRole.ADMIN);
             userRepository.save(adminUser);
 
@@ -111,10 +115,3 @@ public class MockEmployeeDataLoader {
         };
     }
 }
-
-
-
-
-
-
-
